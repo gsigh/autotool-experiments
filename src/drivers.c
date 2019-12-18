@@ -9,9 +9,10 @@ void iterate_drivers(void)
 
 	printf("drivers:");
 	p = drivers_list;
+	printf(" %p", p);
 	while (p && *p) {
 		d = *p++;
-		printf(" %d", *d);
+		printf(" -- %p %d", d, *d);
 	}
 	printf("\n");
 }
