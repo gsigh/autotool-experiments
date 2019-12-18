@@ -1,0 +1,24 @@
+automake and libtool research for sigrok bug #1433
+partial linking to create a NULL terminated list of drivers
+which were built into the library
+
+inspired by https://sigrok.org/bugzilla/show_bug.cgi?id=802
+and https://sigrok.org/bugzilla/show_bug.cgi?id=1433,
+reported for LTO but probably of more general nature
+(just noticed with recent LTO setups)
+
+given constraints:
+- driver source code provided "driver code" (regular application)
+  as well as "list item" (one pointer to the driver's description)
+- driver pointer is put into a separate segment during compilation,
+  needs to get collected to a list of drivers with NULL termination
+  at compile time, ideally before application code uses the library
+- existing build support for the libsigrok library puts all drivers
+  into the src/libdrivers.la library, iteration over the driver list
+  is fortunately concentrated in a src/drivers.c source file
+
+envisioned approach:
+- use a linker script to convert the src/drivers.lo iteration logic
+  plus the src/libdrivers.la code base into a src/libdrivers_list.la
+  library that applications can "juse use"
+
