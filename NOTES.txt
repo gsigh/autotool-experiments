@@ -22,3 +22,14 @@ envisioned approach:
   plus the src/libdrivers.la code base into a src/libdrivers_list.la
   library that applications can "juse use"
 
+interactive libtool use for partial linking
+takes automake out of the equation, still is flawed
+  $ libtool --no-quiet --mode=link gcc -o drivers_list.o src/driver_1.lo src/driver_2.lo src/src_libdrivers_list_la-drivers.lo ../src/drivers.ld
+  libtool: link: /usr/bin/ld -m elf_x86_64 -r -o drivers_list.o  src/.libs/driver_1.o src/.libs/driver_2.o src/.libs/src_libdrivers_list_la-drivers.o
+what the? runs ld(1) which is good, but ignores the specified .ld script which is essential! neither -T file nor -Wl,-T,file change this :(
+
+build with or without LTO support enabled:
+  $ ../configure
+  $ env CFLAGS=-flto LDFLAGS=-flto ../configure
+  then
+  $ make && ./app_combo
