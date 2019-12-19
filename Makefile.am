@@ -40,6 +40,7 @@ src_libdrivers_la_SOURCES = src/driver_1.c src/driver_2.c src/drivers.c src/driv
 DRIVERS_LDSCRIPT = $(srcdir)/src/drivers.ld
 
 # TODO Are these not make(1) variables but autoconf (aka shell) vars?
+# See also $(objdir) $(reload_flag) $(wl)
 libext ?= .a
 objext ?= .o
 
