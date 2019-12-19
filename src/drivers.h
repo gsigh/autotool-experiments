@@ -1,4 +1,5 @@
 void iterate_drivers(void);
+void execute_drivers(void);
 
 struct driver_details {
 	int identification;
