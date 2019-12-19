@@ -9,7 +9,7 @@ struct driver_details {
 extern const struct driver_details *drivers_list[];
 extern const struct driver_details *drivers_end[];
 
-#define DRIVER_DECORATION __attribute__((used, section("driver_items"), aligned(sizeof(int))))
+#define DRIVER_DECORATION __attribute__((used, section(".rodata.drivers"), aligned(sizeof(int))))
 #define DECLARE_DRIVER(name, id, func) \
 	static const struct driver_details driver_ ## name ## _detail = { \
 		.identification = (id), \

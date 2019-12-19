@@ -1,11 +1,8 @@
 SECTIONS {
-	.rodata.driver_list : {
-		QUAD(0);
-		/* PROVIDE(drivers_list = .); */
+	.rodata.drivers_list : {
 		drivers_list = .;
-		KEEP(*(*driver_items));
+		KEEP(*(".rodata.drivers"));
 		QUAD(0);
 		PROVIDE(drivers_end = .);
 	}
 }
-INSERT AFTER .text;
