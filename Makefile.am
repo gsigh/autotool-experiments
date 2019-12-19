@@ -17,9 +17,15 @@ src_libdrivers_list_la_AR = echo HELLO $(LD) -r -o
 src_libdrivers_list_la_LIBTOOLFLAGS = --no-quiet
 DRIVERS_LIST_LIBRARY = src/libdrivers_list.la
 
+# Create a library with additional support code (communication).
+COMM_LIBRARY = src/libcomm.la
+noinst_LTLIBRARIES += $(COMM_LIBRARY)
+src_libcomm_la_SOURCES = src/comm.c src/comm.h
+
 # Create an application which uses the iterating library.
 bin_PROGRAMS = app_static
 app_static_SOURCES = src/app_main.c
 app_static_LDADD = $(DRIVERS_LIST_LIBRARY)
 app_static_LDFLAGS = -Wl,-T,$(DRIVERS_LDSCRIPT)
+app_static_LDADD += $(COMM_LIBRARY)
 EXTRA_app_static_DEPENDENCIES = $(DRIVERS_LDSCRIPT)
