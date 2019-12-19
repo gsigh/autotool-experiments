@@ -18,6 +18,15 @@ src_libdrivers_list_la_AR = echo HELLO $(LD) -r -o
 EXTRA_DIST = $(DRIVERS_LDSCRIPT)
 src_libdrivers_list_la_LIBTOOLFLAGS = --no-quiet
 
+DRVCOMM_LIBRARY = src/libdrvcomm.la
+lib_LTLIBRARIES = $(DRVCOMM_LIBRARY)
+src_libdrvcomm_la_SOURCES = src/drivers.c src/comm.c src/comm.h
+src_libdrvcomm_la_LDFLAGS = -shared
+src_libdrvcomm_la_LDFLAGS += $(DRIVERS_LDSCRIPT) -Wl,--whole-archive $(DRIVERS_LIBRARY) -Wl,--no-whole-archive
+src_libdrvcomm_la_AR = echo HELLO _AR $(LINK) -r -o
+src_libdrvcomm_la_LINK = $(LINK) -r
+src_libdrvcomm_la_LIBTOOLFLAGS = --no-quiet
+
 ## interactive example, uses libtool without automake
 ## $ libtool --no-quiet --mode=link gcc -o drivers_list.o src/driver_1.lo src/driver_2.lo src/src_libdrivers_list_la-drivers.lo ../src/drivers.ld
 ## libtool: link: /usr/bin/ld -m elf_x86_64 -r -o drivers_list.o  src/.libs/driver_1.o src/.libs/driver_2.o src/.libs/src_libdrivers_list_la-drivers.o
@@ -35,3 +44,9 @@ app_static_LDADD = $(DRIVERS_LIST_LIBRARY)
 app_static_LDFLAGS = -Wl,-T,$(DRIVERS_LDSCRIPT)
 app_static_LDADD += $(COMM_LIBRARY)
 EXTRA_app_static_DEPENDENCIES = $(DRIVERS_LDSCRIPT)
+
+# Create an application which uses the combined library.
+bin_PROGRAMS += app_combo
+app_combo_SOURCES = src/app_main.c
+app_combo_LDADD = $(DRIVERS_LIST_LIBRARY) $(DRVCOMM_LIBRARY)
+app_combo_LDFLAGS = $(src_libdrvcomm_la_LDFLAGS)

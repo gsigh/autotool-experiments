@@ -10,5 +10,7 @@ m4/*.m4
 INSTALL
 Makefile.in
 aclocal.m4
+autoscan.log
 config.h.in
 configure
+configure.scan
