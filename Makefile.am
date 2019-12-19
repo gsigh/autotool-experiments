@@ -15,6 +15,7 @@ src_libdrivers_list_la_LIBADD = src/libdrivers.la
 src_libdrivers_list_la_LDFLAGS = -Wl,-T,$(DRIVERS_LDSCRIPT)
 EXTRA_src_libdrivers_list_la_DEPENDENCIES = $(DRIVERS_LDSCRIPT)
 src_libdrivers_list_la_AR = echo HELLO $(LD) -r -o
+EXTRA_DIST = $(DRIVERS_LDSCRIPT)
 src_libdrivers_list_la_LIBTOOLFLAGS = --no-quiet
 
 ## interactive example, uses libtool without automake
