@@ -39,15 +39,19 @@ src_libdrivers_la_SOURCES = src/driver_1.c src/driver_2.c src/drivers.c src/driv
 #   on, yet not replace the linker's script but augment it
 DRIVERS_LDSCRIPT = $(srcdir)/src/drivers.ld
 
+# TODO Are these not make(1) variables but autoconf (aka shell) vars?
+libext ?= .a
+objext ?= .o
+
 # TODO Extract the .a from the .la somehow? Unfortunately libtool does
 # not have -print-file-name as gcc(1) does.
 # TODO Is the name platform dependent, need we use $(libext) variables?
 # grep(1) for '\.a' in the .la file? Still need to add the .libs/ dir.
 # Lots of magic involved, but we also manually create the .lo file since
 # automake won't let us create .lo targets from official .am syntax. :(
-DRIVERS_A_FILENAME = src/.libs/libdrivers.a
+DRIVERS_A_FILENAME = src/.libs/libdrivers$(libext)
 
-DRVLIST_OBJECT = src/drvlist.o
+DRVLIST_OBJECT = src/drvlist$(objext)
 DRVLIST_LTOBJECT = src/drvlist.lo
 
 $(DRVLIST_OBJECT): $(DRIVERS_LIBRARY) $(DRIVERS_LDSCRIPT)
@@ -64,7 +68,7 @@ lib_LTLIBRARIES += $(COMBO_LIBRARY)
 src_libcombo_la_SOURCES = src/comm.c src/comm.h
 src_libcombo_la_LIBADD = $(DRVLIST_LTOBJECT)
 src_libcombo_la_LDFLAGS = -version-info 1:2:0
-src_libcombo_la_LDFLAGS += --emit-relocs -fno-lto -Wc,$(DRIVERS_LDSCRIPT)
+src_libcombo_la_LDFLAGS += -Wc,$(DRIVERS_LDSCRIPT)
 EXTRA_src_libcombo_la_DEPENDENCIES = $(DRIVERS_LDSCRIPT)
 
 # Create an application which uses the combined library.
