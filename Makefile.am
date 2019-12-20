@@ -10,7 +10,16 @@ lib_LTLIBRARIES =
 # Create a library which contains the drivers' code.
 DRIVERS_LIBRARY = src/libdrivers.la
 noinst_LTLIBRARIES += $(DRIVERS_LIBRARY)
-src_libdrivers_la_SOURCES = src/driver_1.c src/driver_2.c src/drivers.c src/drivers.h
+src_libdrivers_la_SOURCES = src/drivers.c src/drivers.h
+if DRIVER_1
+src_libdrivers_la_SOURCES += src/driver_1.c
+endif
+if DRIVER_2
+src_libdrivers_la_SOURCES += src/driver_2.c
+endif
+if DRIVER_3
+src_libdrivers_la_SOURCES += src/driver_3.c
+endif
 
 # Create an object file(!) which contains all drivers' code _and_
 # their registration data, including a list(!) of all drivers which

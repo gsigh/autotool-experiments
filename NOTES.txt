@@ -31,5 +31,7 @@ what the? runs ld(1) which is good, but ignores the specified .ld script which i
 build with or without LTO support enabled:
   $ ../configure
   $ env CFLAGS=-flto LDFLAGS=-flto ../configure
-  then
+build with drivers enabled/disabled (up to three, enabled by default)
+  $ ../configure --disable-driver2
+then
   $ make && ./app_combo
