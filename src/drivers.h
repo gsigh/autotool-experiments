@@ -9,11 +9,20 @@ struct driver_details {
 extern const struct driver_details *drivers_list[];
 extern const struct driver_details *drivers_end[];
 
-#define DRIVER_DECORATION __attribute__((used, section("__sr_driver_list"), aligned(sizeof(int))))
+#ifdef __APPLE__
+#define SR_DRIVER_LIST_SECTION "__DATA,__sr_driver_list"
+#else
+#define SR_DRIVER_LIST_SECTION "__sr_driver_list"
+#endif
+
+#define DRIVER_DECORATION __attribute__((used, \
+	section(SR_DRIVER_LIST_SECTION), \
+	aligned(sizeof(struct driver_details *))))
 #define DECLARE_DRIVER(name, id, func) \
 	static const struct driver_details driver_ ## name ## _detail = { \
 		.identification = (id), \
 		.label = #name, \
 		.callback = (func), \
 	}; \
-	static const struct driver_details *driver_ ## name ## _item DRIVER_DECORATION = &driver_ ## name ## _detail
+	static const struct driver_details *driver_ ## name ## _item \
+		DRIVER_DECORATION = &driver_ ## name ## _detail
