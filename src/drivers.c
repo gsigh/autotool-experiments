@@ -9,33 +9,24 @@
 #define USE_APPROACH		USE_CONSTRUCTORS
 
 /*
- * The runtime registration approach involves a compile time constant
- * upper limit for the number of available drivers. The registration
- * calls are done from "constructors" before main() executes, it's yet
- * to get determined if malloc(3) is available at this time (that is:
- * universally, on all platforms that are supported by sigrok).
- *
- * It's an implementation detail to count the number of overflows and to
- * communicate these conditions to calling application code. Callers can
- * raise a warning or severe error or whatever seems appropriate.
+ * The runtime registration approach. Assumes that registering drivers
+ * provide the list node storage, and that this is the only use of this
+ * memory.
  */
-#define DRIVERS_MAX_COUNT 10
 
-#ifndef ARRAY_SIZE
-#  define ARRAY_SIZE(x)	(sizeof(x) / sizeof(x[0]))
-#endif
+static struct driver_list_node *driver_list_head;
+static struct driver_list_node **driver_list_tail = &driver_list_head;
+static size_t driver_list_size;
 
-static struct driver_details const *drivers_table[DRIVERS_MAX_COUNT];
-static size_t drivers_count;
-static int drivers_exceed;
+void register_driver(struct driver_list_node *node) {
 
-void register_driver(const struct driver_details *details) {
-
-	if (drivers_count == ARRAY_SIZE(drivers_table)) {
-		drivers_exceed++;
+	if (!node)
 		return;
-	}
-	drivers_table[drivers_count++] = details;
+	node->next = NULL;
+
+	*driver_list_tail = node;
+	driver_list_tail = &node->next;
+	driver_list_size++;
 }
 
 void iterate_drivers(void)
@@ -61,17 +52,17 @@ void iterate_drivers(void)
 	}
 	printf("list end\n");
 #elif USE_APPROACH == USE_CONSTRUCTORS
-	size_t count;
+	struct driver_list_node *node;
 	const struct driver_details *d;
 
 	printf("items:\n");
-	for (count = 0; count < drivers_count; count++) {
-		d = drivers_table[count];
+	for (node = driver_list_head; node; node = node->next) {
+		d = node->driver;
+		if (!d)
+			continue;
 		printf(" %p %d %s %p\n", d,
 			d->identification, d->label, d->callback);
 	}
-	if (drivers_exceed)
-		printf("%zu drivers could NOT register.\n", drivers_exceed);
 	printf("list end\n");
 #else
 #  error "unsupported driver iteration approach"
@@ -89,11 +80,13 @@ void execute_drivers(void)
 		d->callback();
 	}
 #elif USE_APPROACH == USE_CONSTRUCTORS
-	size_t count;
+	struct driver_list_node *node;
 	const struct driver_details *d;
 
-	for (count = 0; count < drivers_count; count++) {
-		d = drivers_table[count];
+	for (node = driver_list_head; node; node = node->next) {
+		d = node->driver;
+		if (!d)
+			continue;
 		d->callback();
 	}
 #else

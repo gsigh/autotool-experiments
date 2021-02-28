@@ -37,6 +37,10 @@ then
   $ make && ./app_combo
 
 alternative approach to compile time and linker sections:
-register from constructors at runtime, executes before main()
-and may not rely on malloc(3), could rely on static vars and
-.bss containing zeroes
+register from constructors at runtime, executes before main() and may
+not rely on malloc(3), could rely on static vars and .bss containing
+zeroes, can use a linked list instead of an array _if_ driver items
+provide the node storage, that would elimintate the need for an upper
+limit of the number of drivers, could eliminate the linker section,
+may be most portable, at the expense of a little startup code and a
+little static non-const memory per registered driver
