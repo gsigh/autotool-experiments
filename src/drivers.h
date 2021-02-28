@@ -1,3 +1,5 @@
+#include "runtime_register.h"
+
 void iterate_drivers(void);
 void execute_drivers(void);
 
@@ -14,6 +16,7 @@ extern const struct driver_details *drivers_end[];
 #else
 #define SR_DRIVER_LIST_SECTION "__sr_driver_list"
 #endif
+#define ATTR_CONS __attribute__((constructor))
 
 #define DRIVER_DECORATION __attribute__((used, \
 	section(SR_DRIVER_LIST_SECTION), \
@@ -25,4 +28,9 @@ extern const struct driver_details *drivers_end[];
 		.callback = (func), \
 	}; \
 	static const struct driver_details *driver_ ## name ## _item \
-		DRIVER_DECORATION = &driver_ ## name ## _detail
+		DRIVER_DECORATION = &driver_ ## name ## _detail; \
+	static void driver_ ## name ## _register(void) ATTR_CONS; \
+	static void driver_ ## name ## _register(void) { \
+		runtime_register_driver(&driver_ ## name ## _detail); \
+	} \
+	/* end of DECLARE_DRIVER() */

@@ -35,3 +35,8 @@ build with drivers enabled/disabled (up to three, enabled by default)
   $ ../configure --disable-driver2
 then
   $ make && ./app_combo
+
+alternative approach to compile time and linker sections:
+register from constructors at runtime, executes before main()
+and may not rely on malloc(3), could rely on static vars and
+.bss containing zeroes

@@ -20,6 +20,7 @@ endif
 if DRIVER_3
 src_libdrivers_la_SOURCES += src/driver_3.c
 endif
+src_libdrivers_la_SOURCES += src/runtime_register.c
 
 # Create an object file(!) which contains all drivers' code _and_
 # their registration data, including a list(!) of all drivers which

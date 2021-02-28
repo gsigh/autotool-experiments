@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include "drivers.h"
 
+/*
+ * TODO Adjust iteration code here to use either compile time or runtime
+ * registered items. Currently main() implements it to compare the two
+ * alternative approaches.
+ */
+
 void iterate_drivers(void)
 {
 	const struct driver_details **p, *d;
