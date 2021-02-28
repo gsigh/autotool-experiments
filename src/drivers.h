@@ -1,5 +1,3 @@
-#include "runtime_register.h"
-
 void iterate_drivers(void);
 void execute_drivers(void);
 
@@ -8,8 +6,8 @@ struct driver_details {
 	const char *label;
 	void (*callback)(void);
 };
-extern const struct driver_details *drivers_list[];
-extern const struct driver_details *drivers_end[];
+
+void register_driver(const struct driver_details *details);
 
 #ifdef __APPLE__
 #define SR_DRIVER_LIST_SECTION "__DATA,__sr_driver_list"
@@ -31,6 +29,6 @@ extern const struct driver_details *drivers_end[];
 		DRIVER_DECORATION = &driver_ ## name ## _detail; \
 	static void driver_ ## name ## _register(void) ATTR_CONS; \
 	static void driver_ ## name ## _register(void) { \
-		runtime_register_driver(&driver_ ## name ## _detail); \
+		register_driver(&driver_ ## name ## _detail); \
 	} \
 	/* end of DECLARE_DRIVER() */
