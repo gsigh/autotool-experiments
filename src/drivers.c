@@ -4,10 +4,6 @@
 
 #include "drivers.h"
 
-#define USE_LINKER_SECTION	1
-#define USE_CONSTRUCTORS	2
-#define USE_APPROACH		USE_CONSTRUCTORS
-
 /*
  * The runtime registration approach. Assumes that registering drivers
  * provide the list node storage, and that this is the only use of this
@@ -31,27 +27,6 @@ void register_driver(struct driver_list_node *node) {
 
 void iterate_drivers(void)
 {
-#if USE_APPROACH == USE_LINKER_SECTION
-	extern const struct driver_details *drivers_list[];
-	extern const struct driver_details *drivers_end[];
-
-	const struct driver_details **p, *d;
-
-	printf("table");
-	printf(" refs: %p %p", drivers_list, drivers_end);
-	printf(" len: %zd", drivers_end - drivers_list);
-	printf("\n");
-	printf("items:\n");
-	p = drivers_list;
-	if (!p || !*p)
-		printf("- empty -\n");
-	while (p && *p) {
-		d = *p++;
-		printf(" %p %d %s %p\n", d,
-			d->identification, d->label, d->callback);
-	}
-	printf("list end\n");
-#elif USE_APPROACH == USE_CONSTRUCTORS
 	struct driver_list_node *node;
 	const struct driver_details *d;
 
@@ -64,22 +39,10 @@ void iterate_drivers(void)
 			d->identification, d->label, d->callback);
 	}
 	printf("list end\n");
-#else
-#  error "unsupported driver iteration approach"
-#endif
 }
 
 void execute_drivers(void)
 {
-#if USE_APPROACH == USE_LINKER_SECTION
-	const struct driver_details **p, *d;
-
-	p = drivers_list;
-	while (p && *p) {
-		d = *p++;
-		d->callback();
-	}
-#elif USE_APPROACH == USE_CONSTRUCTORS
 	struct driver_list_node *node;
 	const struct driver_details *d;
 
@@ -89,7 +52,4 @@ void execute_drivers(void)
 			continue;
 		d->callback();
 	}
-#else
-#  error "unsupported driver iteration approach"
-#endif
 }

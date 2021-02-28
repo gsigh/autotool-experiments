@@ -24,24 +24,14 @@ struct driver_list_node {
 };
 void register_driver(struct driver_list_node *node);
 
-#ifdef __APPLE__
-#define SR_DRIVER_LIST_SECTION "__DATA,__sr_driver_list"
-#else
-#define SR_DRIVER_LIST_SECTION "__sr_driver_list"
-#endif
 #define ATTR_CONS __attribute__((constructor))
 
-#define DRIVER_DECORATION __attribute__((used, \
-	section(SR_DRIVER_LIST_SECTION), \
-	aligned(sizeof(struct driver_details *))))
 #define DECLARE_DRIVER(name, id, func) \
 	static const struct driver_details driver_ ## name ## _detail = { \
 		.identification = (id), \
 		.label = #name, \
 		.callback = (func), \
 	}; \
-	static const struct driver_details *driver_ ## name ## _item \
-		DRIVER_DECORATION = &driver_ ## name ## _detail; \
 	static struct driver_list_node driver_ ## name ## _node = { \
 		.driver = &driver_ ## name ## _detail, \
 	}; \
