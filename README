@@ -1,0 +1,41 @@
+research for libsigrok drivers list construction (bug 1433,
+spotted by broken LTO builds, turned into no-linker-magic later)
+
+this README is a short summary, the NOTES.txt file has more details
+
+out of source build recommended, to hold
+several configuration variants in parallel:
+  $ mkdir build && cd build
+build with or without LTO support enabled:
+  $ ../configure
+  $ env CFLAGS=-flto LDFLAGS=-flto ../configure
+build with drivers enabled/disabled (up to three, enabled by default)
+  $ ../configure --disable-driver2
+then
+  $ make && ./app_combo
+
+example for multiple parallel configurations:
+  $ git clone git://repo.or.cz/autotool-experiments.git
+  $ cd autotools-experiments
+  $ autoreconf -i
+  $ mkdir build-empty && pushd build-empty
+  $ ../configure --disable-driver1 --disable-driver2 --disable-driver3
+  $ popd
+  $ mkdir build-empty-lto && pushd build-empty-lto
+  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --disable-driver1 --disable-driver2 --disable-driver3
+  $ popd
+  $ mkdir build-some && pushd build-some
+  $ ../configure --disable-driver1 --enable-driver2 --enable-driver3
+  $ popd
+  $ mkdir build-some-lto && pushd build-some-lto
+  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --disable-driver1 --enable-driver2 --enable-driver3
+  $ popd
+  $ mkdir build-all && pushd build-all
+  $ ../configure --enable-driver1 --enable-driver2 --enable-driver3
+  $ popd
+  $ mkdir build-all-lto && pushd build-all-lto
+  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --enable-driver1 --enable-driver2 --enable-driver3
+  $ popd
+  $ DIRS="build-empty build-empty-lto build-some build-some-lto build-all build-all-lto"
+  $ for D in $DIRS; do make -C $D; done
+  $ for D in $DIRS; do echo "directory $D"; ./$D/app_combo; echo ""; done
