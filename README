@@ -14,6 +14,13 @@ build with drivers enabled/disabled (up to three, enabled by default)
 then
   $ make && ./app_combo
 
+for cross builds:
+  ... similar sequence, but slightly modified ...
+  $ ../configure --host=...
+  ...
+  $ make install DESTDIR=`pwd`/output
+  (other machine) > ./output/usr/bin/app_combo
+
 example for multiple parallel configurations:
   $ git clone git://repo.or.cz/autotool-experiments.git
   $ cd autotools-experiments
