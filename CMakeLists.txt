@@ -1,0 +1,55 @@
+project(DRIVERLIST C)
+
+cmake_minimum_required(VERSION 3.0)
+
+set(WITH_LTO OFF CACHE BOOL "enable link time optimization")
+message(STATUS "with LTO: ${WITH_LTO}")
+
+set(WITH_DRIVER_1 ON CACHE BOOL "enable driver 1")
+set(WITH_DRIVER_2 ON CACHE BOOL "enable driver 2")
+set(WITH_DRIVER_3 ON CACHE BOOL "enable driver 3")
+set(WITH_DRIVER_4 ON CACHE BOOL "enable driver 4")
+set(WITH_DRIVER_5 ON CACHE BOOL "enable driver 5")
+message(STATUS "Enabled drivers:")
+message(STATUS "  Driver 1: ${WITH_DRIVER_1}")
+message(STATUS "  Driver 2: ${WITH_DRIVER_2}")
+message(STATUS "  Driver 3: ${WITH_DRIVER_3}")
+message(STATUS "  Driver 4: ${WITH_DRIVER_4}")
+message(STATUS "  Driver 5: ${WITH_DRIVER_5}")
+
+set(LIB_SRCS
+	src/comm.c
+	src/drivers.c
+)
+if (WITH_DRIVER_1)
+	list(APPEND LIB_SRCS src/driver_1.c)
+endif ()
+if (WITH_DRIVER_2)
+	list(APPEND LIB_SRCS src/driver_2.c)
+endif ()
+if (WITH_DRIVER_3)
+	list(APPEND LIB_SRCS src/driver_3.c)
+endif ()
+if (WITH_DRIVER_4)
+	list(APPEND LIB_SRCS src/driver_4.c)
+endif ()
+if (WITH_DRIVER_5)
+	list(APPEND LIB_SRCS src/driver_5.c)
+endif ()
+if (WITH_LTO)
+	add_compile_options(-flto)
+else ()
+	add_compile_options(-fno-lto)
+endif ()
+add_library(combo SHARED ${LIB_SRCS})
+if (WITH_LTO)
+	target_link_options(combo PUBLIC -flto)
+else ()
+	target_link_options(combo PUBLIC -fno-lto)
+endif ()
+
+set(APP_SRCS
+	src/app_main.c
+)
+add_executable(app_combo ${APP_SRCS})
+target_link_libraries(app_combo combo)
