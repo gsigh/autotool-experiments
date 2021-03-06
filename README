@@ -46,3 +46,14 @@ example for multiple parallel configurations:
   $ DIRS="build-empty build-empty-lto build-some build-some-lto build-all build-all-lto"
   $ for D in $DIRS; do make -C $D; done
   $ for D in $DIRS; do echo "directory $D"; ./$D/app_combo; echo ""; done
+
+when cmake is preferred over autotools:
+  $ mkdir build && cd build
+  $ cmake ..
+  $ make && ./app_combo
+to adjust the configurations or cross build:
+  $ cmake -DWITH_LTO=ON .
+  $ cmake -DWITH_LTO=OFF .
+  $ cmake -DWITH_DRIVER_3=OFF -DWITH_DRIVER_5=OFF .
+  $ ccmake .
+  $ i686-w64-mingw32.static-cmake ..
