@@ -25,6 +25,12 @@ endif
 if DRIVER_3
 src_libcombo_la_SOURCES += src/driver_3.c
 endif
+if DRIVER_4
+src_libcombo_la_SOURCES += src/driver_4.c
+endif
+if DRIVER_5
+src_libcombo_la_SOURCES += src/driver_5.c
+endif
 src_libcombo_la_LDFLAGS = -version-info 1:2:0
 
 # Create an application which uses the combined library.
