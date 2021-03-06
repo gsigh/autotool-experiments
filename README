@@ -26,22 +26,22 @@ example for multiple parallel configurations:
   $ cd autotools-experiments
   $ autoreconf -i
   $ mkdir build-empty && pushd build-empty
-  $ ../configure --disable-driver1 --disable-driver2 --disable-driver3
+  $ ../configure --disable-driver1 --disable-driver2 --disable-driver3 --disable-driver4 --disable-driver5
   $ popd
   $ mkdir build-empty-lto && pushd build-empty-lto
-  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --disable-driver1 --disable-driver2 --disable-driver3
+  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --disable-driver1 --disable-driver2 --disable-driver3 --disable-driver4 --disable-driver5
   $ popd
   $ mkdir build-some && pushd build-some
-  $ ../configure --disable-driver1 --enable-driver2 --enable-driver3
+  $ ../configure --disable-driver1 --enable-driver2 --enable-driver3 --disable-driver4 --disable-driver5
   $ popd
   $ mkdir build-some-lto && pushd build-some-lto
-  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --disable-driver1 --enable-driver2 --enable-driver3
+  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --disable-driver1 --enable-driver2 --enable-driver3 --disable-driver4 --disable-driver5
   $ popd
   $ mkdir build-all && pushd build-all
-  $ ../configure --enable-driver1 --enable-driver2 --enable-driver3
+  $ ../configure --enable-driver1 --enable-driver2 --enable-driver3 --enable-driver4 --enable-driver5
   $ popd
   $ mkdir build-all-lto && pushd build-all-lto
-  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --enable-driver1 --enable-driver2 --enable-driver3
+  $ env CFLAGS=-flto LDFLAGS=-flto ../configure --enable-driver1 --enable-driver2 --enable-driver3 --enable-driver4 --enable-driver5
   $ popd
   $ DIRS="build-empty build-empty-lto build-some build-some-lto build-all build-all-lto"
   $ for D in $DIRS; do make -C $D; done
