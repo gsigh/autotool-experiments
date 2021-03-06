@@ -9,7 +9,7 @@ several configuration variants in parallel:
 build with or without LTO support enabled:
   $ ../configure
   $ env CFLAGS=-flto LDFLAGS=-flto ../configure
-build with drivers enabled/disabled (up to three, enabled by default)
+build with drivers enabled/disabled (up to five, enabled by default)
   $ ../configure --disable-driver2
 then
   $ make && ./app_combo
