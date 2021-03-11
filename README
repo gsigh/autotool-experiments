@@ -3,6 +3,8 @@ spotted by broken LTO builds, turned into no-linker-magic later)
 
 this README is a short summary, the NOTES.txt file has more details
 
+fresh checkout might have to create configure script first
+  $ autoreconf -i
 out of source build recommended, to hold
 several configuration variants in parallel:
   $ mkdir build && cd build
