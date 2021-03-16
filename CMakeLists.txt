@@ -53,3 +53,6 @@ set(APP_SRCS
 )
 add_executable(app_combo ${APP_SRCS})
 target_link_libraries(app_combo combo)
+
+install(TARGETS app_combo RUNTIME DESTINATION "bin")
+install(TARGETS combo LIBRARY DESTINATION "lib")
