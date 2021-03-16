@@ -38,4 +38,5 @@ src_libcombo_la_LDFLAGS = -version-info 1:2:0
 bin_PROGRAMS += app_combo
 app_combo_SOURCES = src/app_main.c
 # app_combo_LDADD = $(COMBO_LIBRARY)
-app_combo_LDFLAGS = -Wl,--push-state,--whole-archive,$(COMBO_LIB_FILENAME),--pop-state
+# app_combo_LDFLAGS = -Wl,--push-state,--whole-archive,$(COMBO_LIB_FILENAME),--pop-state
+app_combo_LDFLAGS = -Wl,--whole-archive,$(COMBO_LIB_FILENAME),--no-whole-archive
