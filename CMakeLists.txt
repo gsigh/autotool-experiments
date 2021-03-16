@@ -44,8 +44,10 @@ endif ()
 add_library(combo SHARED ${LIB_SRCS})
 if (WITH_LTO)
 	target_link_options(combo PUBLIC -flto)
+	# link_libraries(combo -flto)
 else ()
 	target_link_options(combo PUBLIC -fno-lto)
+	# link_libraries(combo -fno-lto)
 endif ()
 
 set(APP_SRCS
