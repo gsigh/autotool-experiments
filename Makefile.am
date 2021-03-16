@@ -13,6 +13,7 @@ lib_LTLIBRARIES =
 # the drivers library (as it was inherited from the libisgrok build)
 # has become obsolete.
 COMBO_LIBRARY = src/libcombo.la
+COMBO_LIB_FILENAME = src/.libs/libcombo.a
 lib_LTLIBRARIES += $(COMBO_LIBRARY)
 src_libcombo_la_SOURCES = src/comm.c src/comm.h
 src_libcombo_la_SOURCES += src/drivers.c src/drivers.h
@@ -36,4 +37,5 @@ src_libcombo_la_LDFLAGS = -version-info 1:2:0
 # Create an application which uses the combined library.
 bin_PROGRAMS += app_combo
 app_combo_SOURCES = src/app_main.c
-app_combo_LDADD = $(COMBO_LIBRARY)
+# app_combo_LDADD = $(COMBO_LIBRARY)
+app_combo_LDFLAGS = -Wl,--push-state,--whole-archive,$(COMBO_LIB_FILENAME),--pop-state
